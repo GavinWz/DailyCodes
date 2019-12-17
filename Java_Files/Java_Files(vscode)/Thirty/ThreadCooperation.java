@@ -1,3 +1,5 @@
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -6,12 +8,21 @@ import java.lang.Math;
 public class ThreadCooperation{
     private static Account account = new Account();
 
+    public static void main(String[] args){
+        System.out.println("Thread 1\t\tThread 2\t\tBalance");
+
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        executor.execute(new WithdrawTask());
+        executor.execute(new DepositTask());
+        executor.shutdown();
+    }
+
     public static class DepositTask implements Runnable{
         @Override
         public void run() {
             try {
                 while(true){
-                    account.deposit(((int)Math.random() * 10) + 1);
+                    account.deposit((int)(Math.random() * 10) + 1);
                     Thread.sleep(1000);
                 }
             }
@@ -24,7 +35,8 @@ public class ThreadCooperation{
     public static class WithdrawTask implements Runnable{
         @Override
         public void run() {
-            account.withdraw(((int)Math.random() * 10) + 1);
+            while(true)
+                account.withdraw((int)(Math.random() * 10) + 1);
         }
     }
 
@@ -38,7 +50,7 @@ public class ThreadCooperation{
             return balance;
         }
 
-        public void withdraw(final int amount){
+        public void withdraw(int amount){
             lock.lock();
             try{
                 while(balance < amount){
@@ -56,7 +68,7 @@ public class ThreadCooperation{
             }
         }
 
-        public void deposit(final int amount){
+        public void deposit(int amount){
             lock.lock();
             try {
                 balance += amount;
