@@ -73,7 +73,7 @@ public class ThreadCooperation{
             try {
                 balance += amount;
                 System.out.println("Desposit " + amount + "\t\t\t\t\t" + getBalance());
-                newDeposit.signalAll();
+                newDeposit.signal();
             }
             finally{
                 lock.unlock();
