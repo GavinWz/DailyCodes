@@ -79,9 +79,5 @@ public class ThreadCooperation{
                 lock.unlock();
             }
         }
-
     }
-
-
-
 }
