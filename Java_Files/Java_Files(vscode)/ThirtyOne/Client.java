@@ -4,7 +4,7 @@ import java.io.*;
 public class Client{
     public static void main(String[] args){
         try{
-            Socket socket = new Socket("192.168.43.152", 8000);
+            Socket socket = new Socket("localhost", 8000);
             DataInputStream fromServer = new DataInputStream(socket.getInputStream());
             DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
             Scanner in = new Scanner(System.in);
